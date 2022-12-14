@@ -1,0 +1,135 @@
+body
+{
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	background: url(images/reg.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.container
+{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width:600px;
+	background: #fff;
+	padding:20px;
+	box-sizing: border-box;
+	border :1px solid rgba(0,0,0,.1);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	border-radius:50px;
+}
+.container h1
+{
+	text-align: center;
+	margin: 0 0 40px;
+	padding: 0;
+	color: rgb(66,133,244);
+	letter-spacing: 2px;
+}
+.container input
+{
+	padding: 5px;
+	margin-bottom: 30px;
+	width: 55%;
+	box-sizing: border-box;
+	box-shadow: none;
+	outline: none;
+	border:none;
+	border-bottom: 2px solid #999;
+}
+.container input[type="submit"]
+{
+	border-radius: 25px;
+	font-size: 20px;
+	height: 40px;
+	cursor : pointer;
+background: linear-gradient(180deg, #000000 5%, #468CCF 100%);
+	color: #fff;
+	margin-bottom: 0;
+}
+.container input[type="submit"]:hover
+{
+background: linear-gradient(180deg, #468CCF 5%, #000000 100%);
+	color: #fff;
+}
+.container form div
+{
+	position: relative;
+}
+.container form div label
+{
+	position: absolute;
+	top: 3px;
+	pointer-events: none;
+	left: 0;
+	transition: .5s;
+}
+.container input:focus ~label,
+.container input:valid ~label
+{
+	left: 0;
+	top: -20px;
+	color: rgb(66,133,244);
+	font-size: 12px;
+	font-weight: bold;
+}
+.container input:focus,
+.container input:valid
+{
+	border-bottom: 2px solid rgb(66,133,244);
+}
+.error_form
+{
+	top: 12px;
+	color: rgb(216, 15, 15);
+    font-size: 15px;
+    font-family: Helvetica;
+}
+
+
+.select {
+    position: relative;
+    display: inline-block;
+    margin-bottom:20px;
+	margin-left:50px;
+    width:25%;
+}    .select select {
+        font-family: 'Arial';
+        display: inline-block;
+        width: 100%;
+        cursor: pointer;
+        padding: 9px 9px;
+        outline: 0;
+        border: 0px solid #d53333;
+        border-radius: 43px;
+        background: #dcdcec;
+        color: #141315;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+        .select select::-ms-expand {
+            display: none;
+        }
+        .select select:hover,
+        .select select:focus {
+            color: #000000;
+            background: #cccccc;
+        }
+        .select select:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+.select select:hover ~ .select_arrow,
+.select select:focus ~ .select_arrow {
+    border-top-color: #000000;
+}
+.select select:disabled ~ .select_arrow {
+    border-top-color: #cccccc;
+}
+
+
+

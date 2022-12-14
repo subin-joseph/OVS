@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+h4
+{
+	color:white;
+}
+body,
+button {
+  font-family: "Inter", sans-serif;
+}
+:root {
+  --offcanvas-width: 270px;
+  --topNavbarHeight: 56px;
+}
+.sidebar-nav {
+  width: var(--offcanvas-width);
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+}
+.sidebar-link .right-icon {
+  display: inline-flex;
+}
+.sidebar-link[aria-expanded="true"] .right-icon {
+  transform: rotate(180deg);
+}
+@media (min-width: 992px) {
+  body {
+	  background-image:url(../images/panel2.jpg);)
+	 
+    overflow: auto !important;
+  }
+  main {
+    margin-left: var(--offcanvas-width);
+  }
+  /* this is to remove the backdrop */
+  .offcanvas-backdrop::before {
+    display: none;
+  }
+  .sidebar-nav {
+    -webkit-transform: none;
+    transform: none;
+    visibility: visible !important;
+    height: calc(100% - var(--topNavbarHeight));
+    top: var(--topNavbarHeight);
+  }
+}
+
+
+.clock{
+font-family:Garamond, serif;
+font-size: 20px;
+letter-spacing: 0px;
+word-spacing: 0px;
+color: #ffff;
+margin-left:2px;
+font-weight: normal;
+text-decoration: none;
+font-style: normal;
+font-variant: small-caps;
+text-transform: none;
+
+}

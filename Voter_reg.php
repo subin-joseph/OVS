@@ -347,25 +347,15 @@ max-width:600px;
 					 
 					  <div class="form-group">
                         <label id="lb">Identity Proof</label>
-						<span class="error_form" id="proof_error_message"></span>
-                        <input type="file" id="form_proof" name="proof" class="file-upload-default" required />
-                        <div class="input-group col-xs-12">
-                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload jpg" />
-                          <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-primary" type="button"> Upload </button>
-                          </span>
-                        </div>
+						<span class="error_form" id="proof_error_message"></span><br>
+                        <input type="file" id="form_proof" name="proof" required />
+                        
                       </div>
 					  <div class="form-group">
                         <label id="lb">Photo</label>
-                        <input type="file" id="form_photo"  name="image" class="file-upload-default" required />
-                        <div class="input-group col-xs-12">
-						<span class="error_form" id="photo_error_message"></span>
-                          <input type="text" id="form_photo" class="form-control file-upload-info" disabled placeholder="Upload jpg" />
-                          <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-primary" type="button"> Upload </button>
-                          </span>
-                        </div>
+						<span class="error_form" id="photo_error_message"></span><br>
+                        <input type="file" id="form_photo"  name="image" required />
+                  
                       </div>
                       <button type="submit" name="submit" class="btn btn-primary mr-2"> Submit </button>
                       <button  class="btn btn-light" type="reset">Cancel</button>
@@ -426,8 +416,9 @@ max-width:600px;
 		 var error_age = false;
          var error_password = false;
          var error_retype_password = false;
-		  var error_proof = false;
+		 var error_proof = false;
 		 var error_photo = false;
+		 var error_face = false;
 
          $("#form_fname").focusout(function(){
             check_fname();
@@ -463,6 +454,10 @@ max-width:600px;
 			
          $("#form_photo").focusout(function() {
             check_photo();
+         });
+		 	
+         $("#form_photo").focusout(function() {
+            check_face();
          });
 
          function check_fname() {
@@ -651,6 +646,39 @@ max-width:600px;
             }
         }
          }
+		 
+ function check_face(){
+ const fileInput = document.getElementById('photo');                
+  const file = fileInput.files[0];
+
+  // Load the selected file into an image element
+  const image = new Image();
+  image.src = URL.createObjectURL(file);
+
+  // Wait for the image to load, then detect faces in the image
+  image.onload = async () => {
+    // Load the face detection model and detect faces in the image
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+    const results = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
+
+    // Count the number of faces detected
+    const numFaces = results.length;
+
+    // Validate the form based on the number of faces detected
+    if (numFaces === 1) {
+      // If one face was detected, proceed with the form submission
+      form.submit();
+    } else {
+      // If no faces or multiple faces were detected, display an error message
+      const errorMessage = document.getElementById('error-message');
+      if (numFaces === 0) {
+        errorMessage.textContent = 'Error: No faces detected in the image.';
+      } else {
+        errorMessage.textContent = 'Error: Multiple faces detected in the image.';
+      }
+    }
+  };
+		 }
 
          $("#registration_form").submit(function() {
             
@@ -675,6 +703,7 @@ max-width:600px;
             check_email();
             check_password();
             check_retype_password();
+			
 
             if (error_fname === false && error_gen === false && error_pno === false && error_age === false && error_sname === false && error_email === false && error_password === false && error_retype_password === false) {
                alert("Registration in process!!");
@@ -707,5 +736,6 @@ max-width:600px;
 		   echo $msg;
 	  }
 					?>
+
   </body>
 </html>

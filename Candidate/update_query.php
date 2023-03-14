@@ -1,6 +1,5 @@
 <?php
-	require_once 'conn.php';
-	
+	include('../config.php');
 	if(ISSET($_POST['update'])){
 		$user_id = $_POST['user_id'];
 		$firstname = $_POST['firstname'];

@@ -166,9 +166,8 @@ button:hover {
     position: relative;
     min-height: 100vh;
     z-index: 0;
-   background:url(images/reg.jpg);
-background-repeat:no-repeat;
-  background-size: 100% 100%;
+    background: rgba(99, 194, 110, 0.1);
+    padding: 40px 40px;
 }
 
 .container {
@@ -181,6 +180,7 @@ background-repeat:no-repeat;
     flex-basis: 50%;
     -webkit-flex-basis: 50%;
     background:#ffffff;
+  
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     display: flex;
@@ -193,8 +193,8 @@ background-repeat:no-repeat;
     -webkit-flex-basis: 60%;
     box-sizing: border-box;
     padding: 3em 3.5em;
-    background:#007dc1de;
-    box-shadow: 2px 9px 49px -17px rgb(0 0 0 / 10%);
+    background: #fff;
+    box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
 }
@@ -256,7 +256,7 @@ background-repeat:no-repeat;
     outline: none;
     margin-bottom: 15px;
     font-size: 16px;
-    color: #020202;
+    color: #999;
     text-align: left;
     padding: 14px 20px;
     width: 100%;
@@ -264,7 +264,7 @@ background-repeat:no-repeat;
     box-sizing: border-box;
     border: none;
     outline: none;
-    background: #e5e5e5;
+    background: transparent;
     border: 1px solid #e5e5e5;
     transition: 0.3s all ease;
 }
@@ -277,7 +277,7 @@ background-repeat:no-repeat;
     font-size: 18px;
     color: #fff;
     width: 100%;
-    background:#00c100;
+    background:#007dc1;
     border: none;
     padding: 14px 15px;
     font-weight: 500;
@@ -289,7 +289,7 @@ background-repeat:no-repeat;
 }
 
 .w3l-mockup-form button:hover {
-    background:#0b941f;
+    background:#0c5f8b;
 }
 
 .w3l-mockup-form .social-icons ul li {

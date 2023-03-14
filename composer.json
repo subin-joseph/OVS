@@ -1,5 +1,11 @@
 {
+
     "require": {
-        "phpmailer/phpmailer": "^6.5"
+        "phpmailer/phpmailer": "^6.5",
+        "google/cloud-vision": "^1.6",
+        "google/apiclient": "^2.13",
+		"microsoft/azure-face-php": "dev-master",
+		"microsoft/windowsazure": "^0.5"
     }
+	
 }

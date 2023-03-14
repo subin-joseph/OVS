@@ -101,7 +101,6 @@ html {
   position: fixed;
   bottom: 10px;
   left: 20px !important;
-  z-index: 2;
 
 }
 
@@ -111,7 +110,7 @@ html {
 }
 
 .goog-te-gadget-simple {
-  background-color:#061293 !important;
+  background-color:#a2a4ba !important;
   border: 1px solid rgba(255, 255, 255, 0.5) !important;
   -webkit-box-shadow: 0px 7px 20px rgba(57, 57, 57, 0.25);
           box-shadow: 0px 7px 20px rgba(57, 57, 57, 0.25);
@@ -124,8 +123,12 @@ html {
   cursor: pointer;
   zoom: 1;
 
-}
+ 
 
+}
+.goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+    color: #f5f5f5;
+}
 .goog-te-menu2 {
   width:25vh;
   

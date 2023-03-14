@@ -10,7 +10,7 @@
             $('#google_translate_element').on("click", function () {
 
                 // Change menu's padding
-                $("iframe").contents().find('.goog-te-menu2-item-selected').css ('display', 'none');
+                $("iframe").contents().find('.goog-te-menu2-item-selected').css ('display', 'hide');
 
                 // Change menu's padding
                 $("iframe").contents().find('.goog-te-menu2').css ('padding', '0px');

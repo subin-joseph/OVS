@@ -1,18 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
-else {
+include('../config.php');
 	$id = $row2['login_id'];
 	if(ISSET($_POST['update'])){
 		$firstname = $_POST['firstname'];
@@ -49,7 +36,6 @@ else {
               header('Location:index.php');
  }
  }
-}
 ?>
 <style>
 .img4 {

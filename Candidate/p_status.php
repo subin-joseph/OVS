@@ -1,6 +1,18 @@
 <?php
   include('session.php');
 include('../config.php');
+$id=$_SESSION['id'];
+$login2=mysqli_query($conn,"select * from tbl_candidate where login_id='$id'");
+$rw=mysqli_fetch_array($login2);
+$msg="";
+$msg2="";
+	$pay=$rw['payment'];
+if ($rw['payment']!=0){
+$msg = "<div class='alert alert-success' >Payment Successsfull</div>";
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +35,6 @@ include('../config.php');
   <link rel="stylesheet" href="css/style.css">
   <!-- endinject -->
   <link rel="icon" type="image/png" href="../favicons/favicon-16x16.png" sizes="16x16">
-</head>
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
@@ -147,20 +158,33 @@ a:hover{
     margin-bottom:10px;
  
 }
+.alert-info {
+    color:#f8f9fa;
+    background-color: #0c932b;
+    border-color: #b8f2dc;
+}
+
+.alert-success {
+    color: #f8f9fa;
+    background-color: #0c932b;
+    border-color: #b8f2dc;
+}
+.alert-danger{
+    color: #f8f9fa;
+    background-color:red;
+    border-color: #b8f2dc;
+}
+.alert-danger{
+    color: #f8f9fa;
+    background-color:red;
+    border-color: #b8f2dc;
+}
+
 </style>
 <body>
-
- <?php
- $cand_id=$_SESSION['id'];
- $pay=mysqli_query($conn,"select payment from tbl_candidate where login_id='$cand_id'");
- $payfet=mysqli_fetch_array($pay);
- if($payfet['payment']==0){
-	                header('Location:payment.php');
- }
- ?>
   <div class="container-scroller d-flex">
     <!-- partial:./partials/_sidebar.html -->
-    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+   <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
 	  <img class="img" src="../<?php echo $_SESSION['img']; ?>"/>
         <li class="nav-item sidebar-category">
@@ -202,7 +226,7 @@ a:hover{
           <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic">
            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
             <span class="menu-title">Payment</span>
-            <i class="menu-arrow"></i>
+           <i class="menu-arrow"></i>
           </a>
           <div class="collapse" id="ui-basic2">
             <ul class="nav flex-column sub-menu">
@@ -246,50 +270,23 @@ a:hover{
         </div>
          
           <div class="row">
-		  <!-- Payment Gateway -->
-		  
 		  
 		  <div class="col-12 col-xl-6 grid-margin stretch-card">
               <div class="row w-100 flex-grow">
                 <div class="col-md-6 grid-margin stretch-card">
 				
 				  
-				 <div class="card" > 
 				 
-				 <?php
-				 $sid=$_SESSION['id'];
-				 $sql3=mysqli_query($conn,"select * from tbl_login where id='$sid'");
-                 $row3=mysqli_fetch_array($sql3);
-				 $sql2= "SELECT * from tbl_candidate where login_id='$sid'";
-				 
- $result2= $conn->query($sql2);
- 
- if ($result2->num_rows > 0) {
-  // output data of each row
-  while($row2 = $result2->fetch_assoc()) {
-	  ?>
-	 
-	  <img style="border-radius:10px;" class="img2" src="../<?php echo $row2['proof'];?>">
-      
-                  </div> &nbsp;
-                  <div class="card" style="border-radius:20px; background:url('images/profile.jpg');">
-                    <div class="card-body">
-                      <p class="card-title" style="color:#ffff; margin-left:34%; margin-bottom:8px;">My Profile</p>
+                  <div class="card" style="border-radius:15px; background:url('images/profile.jpg');width:500px;">
+                    <div class="card-body" >
+                      <p class="card-title" style="color:#ffff; margin-left:25%; margin-bottom:8px;">Transaction Status</p>
 					  <div class="vl">
 					  <img class="img3" src="../<?php echo $_SESSION['img']; ?>"/>
 					   </div>
-                      <p class="text-muted"><img class="icon" src="images/name.png">&nbsp;<?php echo $row2['first name']." ".$row2['lastname']?></p>
-					   <p class="text-muted"><img class="icon" src="images/email.png">&nbsp;<?php echo $row3['email'];?></p>
-					   <p class="text-muted"><img class="icon" src="images/phone.png">&nbsp;<?php echo $row2['contact'];?></p>
-					   <p class="text-muted"><img class="icon" src="images/age.png">&nbsp;<?php echo $row2['Age'];?></p>
-					   <p class="text-muted"><img class="icon" src="images/gen.png">&nbsp;<?php echo $row2['gender'];?></p>
-                      <p class="text-muted"><img class="icon" src="images/loc.png">&nbsp;<?php echo $row2['address'];?></p>
-					  <button class="btn bg-white font-12" type="button" style="margin-left:50px; margin-top:8px; font-size:15px; padding:5px;" data-toggle="modal" type="button" data-target="#update_modal<?php echo $row2['login_id']?>"> 
-					  <i class="fa fa-edit"></i>&nbsp;Edit Profile</button>
-                    </div>
+                      
                   </div>
 				  
-				  
+				  <?php echo $msg; ?> 
 				
 				  
 				  
@@ -299,167 +296,12 @@ a:hover{
                
               </div>
             </div>
-			 
-	<div class="col-12 col-xl-6 grid-margin stretch-card">
-              <div class="row w-100 flex-grow">
-                <div class="col-md-12 grid-margin stretch-card">
-                  <div class="card">
-              <div class="card">
-              <div class="card-header">
-                <span><i class="bi bi-table me-2"></i></span>Regional Administrators
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table
-                    id="example"
-                    class="table table-striped data-table"
-                    style="width: 100%"
-                  >
-                    <thead>
-<tr> <th>Region</th>
-    <th>Officer name</th>
-	<th>Contact</th>
-
-</tr>
-</thead>
-                    <tbody>
-
-					<?php 
 			
-			include 'updateprofile.php'; }}?>
-    </main>
-        
-  
- <?php
- $sql = "SELECT * from tbl_users where status=1";
- $result = $conn->query($sql);
- if ($result->num_rows > 0) {
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-	  ?>
-  <tr>
-    <td><?php echo $row['area'] ?></td>
-    <td><?php echo $row['first name']." ". $row['lastname'] ?></td>
-	<td><?php echo $row['contact'] ?></td>
-
-  </tr>
- <?php
- }
- }
-    ?> 
-	 </tbody>
-                    
-                  </table>
-                </div>
-              </div>
-           
-			  
-			
-                  </div>
-                </div>
-                
-              </div>
-            </div>
-		
-	      
+	
           </div>
 		
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Voter List</h4>
-                  <div class="table-responsive">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Photo</th>
-
-    <th>Name</th>
-	<th>Age</th>
-	<th>Gender</th>
-	<th>Region</th>
-
-                        </tr>
-                      </thead>
-                      <tbody>
-
-    </main>
-        
-  
- <?php
- $sql = "SELECT * from tbl_voters where status=2";
- $result = $conn->query($sql);
- if ($result->num_rows > 0) {
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-	  ?>
-   <tr>
-  
-    <td align="center"><img width="60" height="50" src="../<?php echo $row['img'];?>"> </td>
-    <td><?php echo $row['first name']." ". $row['lastname'] ?></td>
-	<td><?php echo $row['Age'] ?></td>
-	<td><?php echo $row['gender'] ?></td>
-	<td><?php echo $row['area'] ?></td>
-  </tr>
- <?php
- }
- }
-    ?> 
-	 </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
      
-         <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Candidate List</h4>
-                  <div class="table-responsive">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Photo</th>
-    <th>Name</th>
-	<th>Age</th>
-	<th>Gender</th>
-	<th>Party</th>
-	<th>Symbol</th>
-
-                        </tr>
-                      </thead>
-                      <tbody>
-
-    </main>
-        
   
- <?php
- $sql = "SELECT * from tbl_candidate where status=2";
- $result = $conn->query($sql);
- if ($result->num_rows > 0) {
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-	  ?>
-  <tr>
-    <td align="center"><img width="60" height="50" src="../<?php echo $row['img'];?>"> </td>
-    <td><?php echo $row['first name']." ". $row['lastname'] ?></td>
-	<td><?php echo $row['Age'] ?></td>
-	<td><?php echo $row['gender'] ?></td>
-	<td><?php echo $row['party'] ?></td>
-	<td align="center"><img width="60" height="50" src="../<?php echo $row['symbol'];?>"> </td>
-
-  </tr>
- <?php
- }
- }
-    ?> 
-	 </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
           <!-- row end -->
         </div>
         <!-- content-wrapper ends -->
@@ -493,8 +335,6 @@ a:hover{
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap5.min.js"></script>
     <script src="../js/script.js"></script>
-	<script src="js/jquery-3.2.1.min.js"></script>	
-<script src="js/bootstrap.js"></script>	
 </body>
 
 </html>

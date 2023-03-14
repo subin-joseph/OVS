@@ -2,19 +2,7 @@
 <?php
 
 $msg = "";
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
+include('config.php');
 if (isset($_GET['reset'])) {
     if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tbl_login WHERE code='{$_GET['reset']}'")) > 0) {
         if (isset($_POST['submit'])) {
@@ -87,6 +75,7 @@ if (isset($_GET['reset'])) {
 	margin-left:10px;
 	box-sizing: border-box;
 	margin-top:10px;
+	
 }
 
 #input2{
@@ -102,6 +91,7 @@ if (isset($_GET['reset'])) {
     outline: none;
     border: 1px solid #e5e5e5;
     transition: 0.3s all ease;
+	text-align:center;
 }
 #submit{
 	background-color:#0033c4;
@@ -137,6 +127,28 @@ li:hover{
 	color:#25ff00;
 	font-weight:bold;
 }
+.blink {
+  animation: blink 1s infinite;
+  background-color:blue;
+  border-radius:2px;
+  margin-left:10px;
+ max-width:94.5%;
+  text-align:center;
+ padding:4px;
+ color:#ffff;
+
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.1;
+  }
+}
+#blink{
+	 font-weight: 500;
+ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+
 </style>
 <!-- chatbot script -->
 
@@ -184,11 +196,13 @@ li:hover{
 		<div class="card" style="width:130%;">
           <div class="card-body" ><br>
                        
-					   <img src="forgot.gif" style="width:45%; margin-left:30%; margin-bottom:5%;" alt="login">
+					   <div class="blink">
+  <p id="blink">New Password</p>
+</div><br>
                        <form action="" method="post">
 					      <?php echo $msg; ?>
-                            <input type="password" class="password" id="input2" name="password" placeholder="Enter Your Password" required>
-                            <input type="password" id="input2" class="confirm-password" name="confirm-password" placeholder="Enter Your Confirm Password" required>
+                            <input type="password" class="password" id="input2" name="password" placeholder="New Password" required>
+                            <input type="password" id="input2" class="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
                             <span class="error_form" id="captcha_message"></span>
 						    <div  class="g-recaptcha" id="captcha" data-sitekey="6LfvezgiAAAAAHURsqByiFLjbqLrWxZnlRxpmGYr"></div>
 							<button name="submit" class="btn" type="submit" id="submit">Change Password</button>

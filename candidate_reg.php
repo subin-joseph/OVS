@@ -12,20 +12,7 @@ session_start();
     //Load Composer's autoloader
     require 'vendor/autoload.php';
 
-   $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername, 
-    $username, $password, $dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
+include('config.php');
 
     $msg = "";
 
@@ -97,6 +84,29 @@ if ($conn->connect_error) {
 	   $image_size= getimagesize($_FILES['image']['tmp_name']);
 	   move_uploaded_file($_FILES["image"]["tmp_name"],"upload/" .$newfilename);			
 			$location="upload/" .$newfilename;
+			
+			  $image_path = $location;
+
+      // Send POST request to Flask server
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, 'http://localhost:5000/detect_faces');
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, ['image' => new \CURLFile($image_path)]);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $response = curl_exec($ch);
+      curl_close($ch);
+      
+      // Decode JSON response
+      $result = json_decode($response, true);
+      
+      // Extract number of faces
+      $num_faces = $result['num_faces'];
+
+     if($num_faces==1)
+     {
+
+			
+			
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tbl_login WHERE email='{$email}'")) > 0) {
             $msg = "<div class='alert alert-danger'>{$email} - This email address has been already exists.</div>";
         } 
@@ -118,7 +128,7 @@ if ($conn->connect_error) {
 						{
 							$login_id=$data['id'];
 						}
-					    $sql2= "INSERT INTO tbl_candidate VALUES (DEFAULT,'$login_id','$firstname','$lastname',$age,'$contact','$gender','$party','$address','$location','$location1','$location2','$location3','$assets','$punish','$postal',1,'')";
+					    $sql2= "INSERT INTO tbl_candidate VALUES (DEFAULT,'$login_id','$firstname','$lastname','$age','$contact','$gender','$party','$address','$location','$location1','$location2','$location3','$assets','$punish','$postal',1,'',0)";
 					   $result2 = mysqli_query($conn, $sql2);
 					}
                     echo "<div style='display: none;'>";
@@ -159,7 +169,15 @@ if ($conn->connect_error) {
                 $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match</div>";
             }
         }
-    }
+     }
+       else if($num_faces > 1){
+        $msg = "<div class='alert alert-danger'>Multiple face detected in the uploaded profile image</div>";
+       
+       }
+       else{
+        $msg = "<div class='alert alert-danger'>No face detected in the uploaded profile image</div>";
+      }
+	}
 ?>
 <html lang="en">
   <head>
@@ -184,7 +202,6 @@ if ($conn->connect_error) {
 	 
     <!-- End layout styles -->
     <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
-	
   </head>
   <style>
   .check-label{
@@ -878,6 +895,7 @@ max-width:600px;
 		   echo $msg;
 	  }
 					?>
+				
 
   </body>
 </html>

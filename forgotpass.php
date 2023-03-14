@@ -16,19 +16,7 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
+include('config.php');
 $msg = "";
 
 if (isset($_POST['submit'])) {
@@ -175,6 +163,28 @@ li:hover{
 	color:#25ff00;
 	font-weight:bold;
 }
+.blink {
+  animation: blink 1s infinite;
+  background-color:blue;
+  border-radius:2px;
+  margin-left:10px;
+ max-width:94.5%;
+  text-align:center;
+ padding:4px;
+ color:#ffff;
+
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.1;
+  }
+}
+#blink{
+	 font-weight: 500;
+ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+
 </style>
 <!-- chatbot script -->
 
@@ -222,7 +232,9 @@ li:hover{
 		<div class="card" style="width:130%;">
           <div class="card-body" ><br>
                        
-					   <img src="forgot.gif" style="width:45%; margin-left:30%; margin-bottom:5%;" alt="login">
+					   <div class="blink">
+  <p id="blink">Reset Password</p>
+</div><br>
                         <form action="" id="login_form"  method="post">
 						<?php echo $msg; ?>
                             <input type="email" id="input2" class="email" name="email" placeholder="Enter Your Email" required>

@@ -1,31 +1,23 @@
 <?php
+include('config.php');
+
+require 'vendor/autoload.php';
+
+
+
     //Import PHPMailer classes into the global namespace
     //These must be at the top of your script, not inside a function
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
+	
+
 session_start();
     if (isset($_SESSION['SESSION_EMAIL'])) {
         header("Location: welcome.php");
         die();
     }
-    //Load Composer's autoloader
-    require 'vendor/autoload.php';
 
-   $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername, 
-    $username, $password, $dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
 
 
 $query ="SELECT area FROM tbl_users where status=1";
@@ -45,6 +37,7 @@ $query ="SELECT area FROM tbl_users where status=1";
 		$age= mysqli_real_escape_string($conn, $_POST['age']);
 		$gender= mysqli_real_escape_string($conn, $_POST['gender']);
 		$address= mysqli_real_escape_string($conn, $_POST['address']);
+		$region= mysqli_real_escape_string($conn, $_POST['region']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
 		$contact= mysqli_real_escape_string($conn, $_POST['contact']);
 		$postal= mysqli_real_escape_string($conn, $_POST['postal']);
@@ -52,6 +45,7 @@ $query ="SELECT area FROM tbl_users where status=1";
         $confirm_password = mysqli_real_escape_string($conn, md5($_POST['confirm_password']));
         $code = mysqli_real_escape_string($conn, md5(rand()));
        $image=$_FILES['image']["name"];
+	   
        $temp = explode(".", $_FILES["image"]["name"]);
        $newfilename = round(microtime(true)) . '.' . end($temp);
        $image= addslashes(file_get_contents($_FILES['image']['tmp_name']));
@@ -59,6 +53,10 @@ $query ="SELECT area FROM tbl_users where status=1";
 	   $image_size= getimagesize($_FILES['image']['tmp_name']);
 	   move_uploaded_file($_FILES["image"]["tmp_name"],"upload/" .$newfilename);			
 			$location="upload/" .$newfilename;
+			
+
+
+
 			
 			function generateRandomString($length = 25) {
               $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -78,7 +76,31 @@ $query ="SELECT area FROM tbl_users where status=1";
 	   $image_name2= addslashes($_FILES['proof']['name']);
 	   $image_size2= getimagesize($_FILES['proof']['tmp_name']);
 	   move_uploaded_file($_FILES["proof"]["tmp_name"],"upload/" .$newfilename2);			
-			$location2="upload/" .$newfilename2;			
+			$location2="upload/" .$newfilename2;	
+
+
+      $image_path = $location;
+
+      // Send POST request to Flask server
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, 'http://localhost:5000/detect_faces');
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, ['image' => new \CURLFile($image_path)]);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      $response = curl_exec($ch);
+      curl_close($ch);
+      
+      // Decode JSON response
+      $result = json_decode($response, true);
+      
+      // Extract number of faces
+      $num_faces = $result['num_faces'];
+
+     if($num_faces==1)
+     {
+
+
+			
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tbl_login WHERE email='{$email}'")) > 0) {
             $msg = "<div class='alert alert-danger'>{$email} - This email address has been already exists.</div>";
         } else {
@@ -93,7 +115,7 @@ $query ="SELECT area FROM tbl_users where status=1";
 						{
 							$login_id=$data['id'];
 						}
-					    $sql2= "INSERT INTO tbl_voters VALUES (DEFAULT,'$login_id','$firstname','$lastname',$age,'$contact','$gender','$address','$postal','$location','$location2',1,'')";
+					    $sql2= "INSERT INTO tbl_voters VALUES (DEFAULT,'$login_id','$firstname','$lastname','$age','$contact','$gender','$address','$region','$postal','$location','$location2',1,'')";
 					   $result2 = mysqli_query($conn, $sql2);
 					}
                     echo "<div style='display: none;'>";
@@ -125,7 +147,7 @@ $query ="SELECT area FROM tbl_users where status=1";
                     } catch (Exception $e) {
                         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                     }
-                    echo "</div>";
+                  echo "</div>";
                     $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div>";
                 } else {
                     $msg = "<div class='alert alert-danger'>Something wrong went.</div>";
@@ -134,7 +156,19 @@ $query ="SELECT area FROM tbl_users where status=1";
                 $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match</div>";
             }
         }
-    }
+       }
+       else if($num_faces > 1){
+        $msg = "<div class='alert alert-danger'>Multiple face detected in the uploaded profile image</div>";
+       
+       }
+       else{
+        $msg = "<div class='alert alert-danger'>No face detected in the uploaded profile image</div>";
+      }
+    
+
+       }
+	   
+    
 ?>
 <html lang="en">
   <head>
@@ -159,7 +193,6 @@ $query ="SELECT area FROM tbl_users where status=1";
 	 
     <!-- End layout styles -->
     <link rel="icon" type="image/png" href="favicons/favicon-16x16.png" sizes="16x16">
-	
   </head>
   <style>
   .check-label{
@@ -190,6 +223,10 @@ $query ="SELECT area FROM tbl_users where status=1";
     border-color: #b8f2fc;
 max-width:600px;
 }
+.notify{
+	color:#28a745;
+	font-weight:bold;
+}
   </style>
   <body>
     <div class="container-scroller">
@@ -204,15 +241,9 @@ max-width:600px;
                   <span class="menu-title">Home</span>
                 </a>
               </li>
-              
-              <li class="nav-item">
-                <div class="nav-link d-flex">
-                 
-                 
-                </div>
-              </li>
             </ul>
           </div>
+		  <marquee behavior="scroll" direction="left"><p class="notify">Aaadhaaar is accepted as a proof of identity.......</p></marquee>
         </nav>
       </div>
       <!-- partial -->
@@ -303,8 +334,26 @@ max-width:600px;
                             </div>
                           </div>
                         </div>
+						 <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" id="lb">Region</label>
+                            <div class="col-sm-9">
+                               <select name="region" placeholder="region" class="form-control">
+							   <?php $op="select area from tbl_users where status=1";
+$resop= $conn->query($op);
+if ($resop->num_rows > 0) {
+  // output data of each row
+  while($rowp = $resop->fetch_assoc()) {?>         
+                                <option value="<?php echo $rowp['area']?>"><?php echo $rowp['area'] ?></option>
+<?php }}?>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+					  <div class="row">
                       
+						 </div>
                      
                   </div>
                 </div>
@@ -647,38 +696,7 @@ max-width:600px;
         }
          }
 		 
- function check_face(){
- const fileInput = document.getElementById('photo');                
-  const file = fileInput.files[0];
-
-  // Load the selected file into an image element
-  const image = new Image();
-  image.src = URL.createObjectURL(file);
-
-  // Wait for the image to load, then detect faces in the image
-  image.onload = async () => {
-    // Load the face detection model and detect faces in the image
-    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-    const results = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
-
-    // Count the number of faces detected
-    const numFaces = results.length;
-
-    // Validate the form based on the number of faces detected
-    if (numFaces === 1) {
-      // If one face was detected, proceed with the form submission
-      form.submit();
-    } else {
-      // If no faces or multiple faces were detected, display an error message
-      const errorMessage = document.getElementById('error-message');
-      if (numFaces === 0) {
-        errorMessage.textContent = 'Error: No faces detected in the image.';
-      } else {
-        errorMessage.textContent = 'Error: Multiple faces detected in the image.';
-      }
-    }
-  };
-		 }
+ 
 
          $("#registration_form").submit(function() {
             
@@ -735,7 +753,8 @@ max-width:600px;
 		   <?php
 		   echo $msg;
 	  }
-					?>
-
+				?>
+	
+	
   </body>
 </html>

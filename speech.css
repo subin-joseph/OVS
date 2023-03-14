@@ -1,0 +1,19 @@
+
+#toggle {
+  background-color:#0e8e49;
+  padding:8px;
+  border: 0;
+  color:#ffff;
+  margin-block-start: var(--gap);
+ 
+}
+#toggle.listening {
+  background-color: hsl(0, 50%, 50%);
+  color: hsl(0, 50%, 95%);
+}
+code {
+  background: #333;
+  color: lime;
+  display: block;
+  padding: calc(var(--gap) / 2);
+}

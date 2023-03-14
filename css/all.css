@@ -54,9 +54,9 @@ p {
 
 .logo {
   float: left;
-  margin-right:150%;
-  width: 16px;
-  height:16px; }
+  margin: 0 0 0 15px;
+  width: 151px;
+  height: 41px; }
 
 .social-placeholder {
   padding: 9px 0 0;
@@ -1166,6 +1166,3 @@ p {
     padding: 20px 0; }
 
 /*# sourceMappingURL=all.css.map */
-
-
-

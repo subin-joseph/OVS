@@ -1,22 +1,9 @@
 
 <?php
-  session_start();
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
-
+include('config.php');
+session_start();
   $msg = "";
-
+  $msg4="";
     if (isset($_GET['verification'])) {
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tbl_login WHERE code='{$_GET['verification']}'")) > 0) {
             $query = mysqli_query($conn, "UPDATE tbl_login SET code='' WHERE code='{$_GET['verification']}'");
@@ -25,7 +12,7 @@ if ($conn->connect_error) {
                 $msg = "<div class='alert alert-success'>Account verification has been successfully completed.</div>";
             }
         } else {
-            header("Location: login.php");
+            header("Location:index.php");
         }
     }
 	
@@ -38,7 +25,7 @@ $Password= md5($_POST['password']);
 $sql=mysqli_query($conn,"select * from tbl_login where Status=1");
 $cnt=mysqli_num_rows($sql);
 
-$sql2=mysqli_query($conn,"select * from tbl_login where role='Candidate'");
+$sql2=mysqli_query($conn,"select * from tbl_candidate where payment !=0");
 $cnt2=mysqli_num_rows($sql2);
 
 $sql3=mysqli_query($conn,"select * from tbl_login where role='Voter'");
@@ -172,6 +159,8 @@ $role=$row['role'];
 }
 $fet=mysqli_query($conn,"SELECT * FROM `tbl_notify`");
 $row=mysqli_fetch_array($fet);
+
+
 ?>
 
 <html lang="en">
@@ -221,6 +210,7 @@ $row=mysqli_fetch_array($fet);
 	margin-left:10px;
 	box-sizing: border-box;
 	margin-top:10px;
+	text-align:center;
 }
 
 #input2{
@@ -241,7 +231,9 @@ $row=mysqli_fetch_array($fet);
 #submit{
 	background-color:#0033c4;
 	color:#ffff;
-	height:56px;
+	height:45px;
+	 font-weight: 500;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
 }
 #submit:hover{
 	background-color:#0c2772;
@@ -272,11 +264,318 @@ li:hover{
 	color:red;
 	font-weight:bold;
 }
+.mck-box-top {
+    padding: 0 10px;
+    min-height: 60px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #01108f;
+    color: #fff;
+}
+ 
+ .contact .info {
+  width: 100%;
+  background: #fff;
+}
+
+.contact .info i {
+  font-size: 20px;
+  color: #3f43fd;
+  float: left;
+  width: 44px;
+  height: 44px;
+  background: #f0f0ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  transition: all 0.3s ease-in-out;
+}
+
+.contact .info h4 {
+  padding: 0 0 0 60px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #010483;
+}
+
+.contact .info p {
+  padding: 0 0 0 60px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #0205a1;
+}
+
+.contact .info .email,
+.contact .info .phone {
+  margin-top: 40px;
+}
+
+.contact .info .email:hover i,
+.contact .info .address:hover i,
+.contact .info .phone:hover i {
+  background: #1acc8d;
+  color: #fff;
+}
+
+.contact .feedform {
+  width: 100%;
+  background: #fff;
+}
+
+.contact .feedform .form-group {
+  padding-bottom: 8px;
+}
+
+.contact .feedform .error-message {
+  display: none;
+  color: #fff;
+  background: #ed3c0d;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.contact .feedform .error-message br+br {
+  margin-top: 25px;
+}
+
+.contact .feedform .sent-message {
+  display: none;
+  color: #fff;
+  background: #18d26e;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.contact .feedform .loading {
+  display: none;
+  background: #fff;
+  text-align: center;
+  padding: 15px;
+}
+
+.contact .feedform .loading:before {
+  content: "";
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px -6px 0;
+  border: 3px solid #18d26e;
+  border-top-color: #eee;
+  -webkit-animation: animate-loading 1s linear infinite;
+  animation: animate-loading 1s linear infinite;
+}
+
+.contact .feedform input,
+.contact .feedform textarea {
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.contact .feedform input {
+  height: 44px;
+}
+
+.contact .feedform textarea {
+  padding: 10px 12px;
+}
+
+.contact .feedform button[type=submit] {
+  background: #1acc8d;
+  border: 0;
+  padding: 10px 30px;
+  color: #fff;
+  transition: 0.4s;
+  border-radius: 50px;
+}
+
+.contact .feedform button[type=submit]:hover {
+  background: #34e5a6;
+}
+
+
+.login-with-google-btn {
+  transition: background-color .3s, box-shadow .3s;
+  width:94.5%;
+  padding: 12px 16px 12px 42px;
+  margin-top:5px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+  margin-left:2px;
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+  background-color: #0033c4;
+  background-repeat: no-repeat;
+  background-position: 12px 11px;
+  
+  &:hover {
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+  }
+  
+  &:active {
+    background-color: #eeeeee;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 
+      0 -1px 0 rgba(0, 0, 0, .04),
+      0 2px 4px rgba(0, 0, 0, .25),
+      0 0 0 3px #c8dafc;
+  }
+  
+  &:disabled {
+    filter: grayscale(100%);
+    background-color: #ebebeb;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+    cursor: not-allowed;
+  }
+}
+.login-with-google-btn:hover{
+	background-color:#0c2772;
+		color:#ffff;
+}
+.login-with-google-btn1{
+  transition: background-color .3s, box-shadow .3s;
+  width:94.5%;
+  padding: 12px 16px 12px 42px;
+  margin-top:5px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+   margin-left:2px;
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  
+ background-image: url('images/candidate.png');
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: 8px 8px;  
+  background-size:25px;
+  
+  &:hover {
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+  }
+  
+  &:active {
+    background-color: #eeeeee;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 
+      0 -1px 0 rgba(0, 0, 0, .04),
+      0 2px 4px rgba(0, 0, 0, .25),
+      0 0 0 3px #c8dafc;
+  }
+  
+  &:disabled {
+    filter: grayscale(100%);
+    background-color: #ebebeb;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+    cursor: not-allowed;
+  }
+}
+.login-with-google-btn2 {
+  transition: background-color .3s, box-shadow .3s;
+  width:94.5%;
+  padding: 12px 16px 12px 42px;
+  margin-top:5px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+   margin-left:2px;
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+  
+  background-image: url('images/voter.png');
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: 8px 8px;  
+  background-size:25px;
+  
+  &:hover {
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+  }
+  
+  &:active {
+    background-color: #eeeeee;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 
+      0 -1px 0 rgba(0, 0, 0, .04),
+      0 2px 4px rgba(0, 0, 0, .25),
+      0 0 0 3px #c8dafc;
+  }
+  
+  &:disabled {
+    filter: grayscale(100%);
+    background-color: #ebebeb;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+    cursor: not-allowed;
+  }
+}
+.blink {
+  animation: blink 1s infinite;
+  background-color:#0c8c66;
+  border-radius:2px;
+  margin-left:10px;
+ max-width:94.5%;
+  text-align:center;
+ padding:4px;
+ color:#ffff;
+
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.1;
+  }
+}
+#blink{
+	 font-weight: 500;
+ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+
 </style>
 <!-- chatbot script -->
 
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	 
+	
+	<script type="text/javascript">
+    (function(d, m){
+        var kommunicateSettings = 
+                 {"appId":"431c30a96959fc7a82e7968ce1d26b2d","popupWidget":true,"automaticChatOpenOnNavigation":true};
+        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+        s.src = "kommunicate.json";
+		
+        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+        window.kommunicate = m; m._globals = kommunicateSettings;
+     
+	})(document, window.kommunicate || {});
+/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+</script>
+<link href="translate.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+<link rel="stylesheet" href="speech.css">
 </head>
 
 <body>
@@ -320,7 +619,9 @@ li:hover{
     </div>
 	<!-- Running notification -->
 	<marquee behavior="scroll" direction="left"><p class="notify"><?php echo $row['text'];?></p></marquee>
-
+ <?php
+        include 'google_translater.php'
+    ?>
   </header><!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
@@ -339,25 +640,180 @@ li:hover{
           </div>
         </div>
         <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
-		<div class="card" style="width:130%;">
+		<div class="card" style="width:130%; margin-left:61%;">
           <div class="card-body" ><br>
                        
-					   <img src="login.gif" style="width:25%; margin-left:34%;" alt="login">
+					   <div class="blink">
+  <p id="blink">Sign in here</p>
+</div>
+
                         <form action="" id="login_form" method="post">
 						 <div id="input" ><?php echo $msg; ?></div>
-                            <input type="text" class="email" id="input2" name="username" placeholder="Enter Your E-mail" required>
-                            <input type="password" id="input2" class="password" name="password" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>
+                            <input type="text" class="email" id="input2" name="username" placeholder=" Your e-mail" style="text-align:center;"required>
+                            <input type="password" id="input2" class="password" name="password" placeholder="Your Password" style="margin-bottom: 2px; text-align:center;" required>
                             
                             <span class="error_form" id="captcha_message"></span>
 						     <div  class="g-recaptcha" id="captcha" data-sitekey="6LcOSFYiAAAAALzBGK9rglmn5uufXvWmiCSf2Rl1"></div>
 							
-							<button name="submit" name="submit" id="submit" class="btn" type="submit">Login</button>
-							<p><a href="forgotpass.php" style="margin-left:25px;font-weight:bold;">Forgot Password?</a></p>
+							<button name="submit" style="color:white;font-weight:bold;margin-bottom:2px;" name="submit" id="submit" class="btn" type="submit">Sign in</button>
+							<a style="margin-left:48%;"> or </a>
+							<?php
+   include('with_google.php');
+
+$login_button = '';
+
+
+if(isset($_GET["code"]))
+{
+
+ $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+
+
+ if(!isset($token['error']))
+ {
+ 
+  $google_client->setAccessToken($token['access_token']);
+
+ 
+  $_SESSION['access_token'] = $token['access_token'];
+
+
+  $google_service = new Google_Service_Oauth2($google_client);
+
+ 
+  $data = $google_service->userinfo->get();
+
+ 
+  if(!empty($data['given_name']))
+  {
+   $_SESSION['user_first_name'] = $data['given_name'];
+  }
+
+  if(!empty($data['family_name']))
+  {
+   $_SESSION['user_last_name'] = $data['family_name'];
+  }
+
+  if(!empty($data['email']))
+  {
+   $_SESSION['user_email_address'] = $data['email'];
+  }
+
+  if(!empty($data['gender']))
+  {
+   $_SESSION['user_gender'] = $data['gender'];
+  }
+
+  if(!empty($data['picture']))
+  {
+   $_SESSION['user_image'] = $data['picture'];
+  }
+$UserName=$_SESSION['user_email_address'];
+$sql=mysqli_query($conn,"select * from tbl_login where Status=1");
+$cnt=mysqli_num_rows($sql);
+
+$sql2=mysqli_query($conn,"select * from tbl_login where role='Candidate'");
+$cnt2=mysqli_num_rows($sql2);
+
+$sql3=mysqli_query($conn,"select * from tbl_login where role='Voter'");
+$cnt3=mysqli_num_rows($sql3);
+
+
+$login=mysqli_query($conn,"select * from tbl_login where email='$UserName'");
+$count=mysqli_num_rows($login);
+$row=mysqli_fetch_array($login);
+if ($count > 0){
+$id=$row['id'];
+$login2=mysqli_query($conn,"select * from tbl_candidate where login_id='$id'");
+$rw=mysqli_fetch_array($login2);
+
+
+$login3=mysqli_query($conn,"select * from tbl_voters where login_id='$id'");
+$rw1=mysqli_fetch_array($login3);
+
+$_SESSION['id']=$row['id'];
+$_SESSION['role'] =$row["role"];
+$_SESSION['email'] =$row["email"];
+$user=$row['email'];
+$role=$row['role'];
+	 if($row["role"]=="Candidate")
+	    {
+         if($row["Status"]==1)
+		 {
+			 
+		  $_SESSION['name'] = $rw["first name"]." ".$rw["lastname"];
+		  $_SESSION['img'] = $rw["img"];
+		   if (empty($row['code'])) {
+			    echo "<script>window.location.href='Candidate/index.php'</script>";
+			  $sql2="INSERT INTO tbl_history VALUES('','$user','$role','Login', NOW())";
+		  $result=$conn->query($sql2);
+            } 
+			else {
+                $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
+            }
+		 }
+		 else{
+		     $msg = "<div class='alert alert-danger'>Incorrect username or Password.</div>";
+			}
+	    } 
+
+	  else if($row["role"]=="Voter")
+	     {
+	         if($row["Status"]==1)
+		     {
+		     $_SESSION['name'] =$rw1["first name"]." ".$rw1["lastname"];
+			$_SESSION['img'] = $rw1["img"];
+		   
+		    if (empty($row['code'])) {
+			  echo "<script>window.location.href='Voter/index.php'</script>";
+			  $sql2="INSERT INTO tbl_history VALUES('','$user','$role','Login', NOW())";
+		      $result=$conn->query($sql2);
+            } 
+			else {
+                $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
+            }
+			 }
+		  else{
+		     $msg = "<div class='alert alert-danger'>Incorrect username or Password.</div>";
+			}
+		 }
+		
+		 
+	  else
+	     {
+	      $msg = "<div class='alert alert-danger'>Email or password do not match.</div>";
+	     }
+   }
+   else
+    {
+	session_destroy();
+	$msg = "<div class='alert alert-danger'>Incorrect username or Password.</div>";
+	}
+ }
+}
+
+ $login_button = '<a href="'.$google_client->createAuthUrl().'" class="btn-text" style="color:white;font-weight:bold">Login With Google</a>';
+	   echo '<br><div class="google-icon-wrapper"><div align="center">
+    <button  type="button" class="login-with-google-btn" >'
+	.$login_button . 
+  '</button></div></div>';
+
+   
+   ?>
+						
                         </form>
-                        <div class="social-icons">
-                            <p style="font-weight:bold; color:green;">Candidate Signup! <a href="candidate_reg.php">Register</a>
-							<p style="font-weight:bold; color:green;">Voter Signup! <a href="voter_reg.php">Register</a>.</p>
-                        </div>
+						<div class="google-icon-wrapper"><div align="center">
+    <button  type="button" class="login-with-google-btn1" >
+	 <a class="btn-text"style="color:black;font-weight:bold"  href="candidate_reg.php">Candidate Registration</a> </button></div></div>
+	 <div class="google-icon-wrapper"><div align="center">
+    <button  type="button" class="login-with-google-btn2" >
+	 <a class="btn-text" style="color:black;font-weight:bold" href="voter_reg.php">Voter Registration</a> </button></div></div>
+       <a href="forgotpass.php" style="margin-left:25px;margin-down:2px;font-weight:bold;">Forgot Password?</a>                 
+						
+					
+
+
+					
                    </div></div>
 				   
         </div>
@@ -758,7 +1214,7 @@ li:hover{
               <div class="address">
                 <i class="bi bi-geo-alt"></i>
                 <h4>Location:</h4>
-                <p>Kanjirappally, Kottyam,685552</p>
+                <p>Delhi,Block 16,785553</p>
               </div>
 
               <div class="email">
@@ -777,10 +1233,27 @@ li:hover{
             </div>
 
           </div>
-
+<?php 
+if (isset($_POST['feed'])){
+	
+	$name1= mysqli_real_escape_string($conn, $_POST['name']);
+    $email1= mysqli_real_escape_string($conn, $_POST['email']);
+    $feed1= mysqli_real_escape_string($conn, $_POST['subject']);
+	$sql4="INSERT INTO `tbl_feedback`(`id`, `Name`, `text`, `email`) VALUES (DEFAULT,'$name1','$feed1','$email1')";
+    $result4=$conn->query($sql4);
+	if($result4){
+				     $msg4 = "<div class='alert alert-success'>Your feedback has been recorded successfully</div>";
+					 echo "<script>window.location.href='index.php#contact'</script>";
+	}
+	else{
+		$msg4 = "<div class='alert alert-danger'>Something went wrong</div>";
+		echo "<script>window.location.href='index.php#contact'</script>";
+	}
+}
+?>
           <div class="col-lg-8 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
 
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form action="#" method="POST"  class="feedform">
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -790,17 +1263,13 @@ li:hover{
                 </div>
               </div>
               <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+                <textarea class="form-control"  name="subject" rows="5" placeholder="Please enter your feedback" required></textarea>
               </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
+			  <button type="button"  id="toggle">start speaking</button>
               <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
+                <?php echo $msg4; ?>
               </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
+             <button  type="submit" name="feed" >Send Feedback</button>
             </form>
 
           </div>
@@ -818,7 +1287,7 @@ li:hover{
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 footer-newsletter">
-           <input style="margin-left:140%;"type="submit" value="Back To Top">
+		      <a href="#hero" style="margin-left:140%;"><button style="background-color:blue;">Back To Top</button></a>
           </div>
         </div>
       </div>
@@ -826,89 +1295,22 @@ li:hover{
 
   </footer><!-- End Footer -->
 
-  <a id="myBtn" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-robot"></i></a>
-  <div id="myModal" style="background:transparent;" class="modal">
-  <div class="chatbox" style="border:2px solid #198754;background:url('chat.png');">
-        <div class="title">Chatbot <i style="margin-left:68%;" class="fa fa-close"  id="bn"></i></div>
-        <div class="form">
-            <div class="bot-inbox inbox">
-               
-                    <i class="fas fa-user"></i>
-                
-                <div class="msg-header">
-                    <p>Hello there, how can I help you?</p>
-                </div>
-            </div>
-        </div>
-        <div class="typing-field">
-            <div class="input-data">
-                <input id="data" type="text" placeholder="Type something here.." required>
-                <button type="submit" id="send-btn">Send</button>
-            </div>
-        </div>
-    </div>
-    </div>
   <div id="preloader"></div>
 
-   <script>
-        $(document).ready(function(){
-            $("#send-btn").on("click", function(){
-                $value = $("#data").val();
-                $msg = '<div class="user-inbox inbox"><div class="msg-header"><p>'+ $value +'</p></div></div>';
-                $(".form").append($msg);
-                $("#data").val('');
-                
-                // start ajax code
-                $.ajax({
-                    url: 'message.php',
-                    type: 'POST',
-                    data: 'text='+$value,
-                    success: function(result){
-                        $replay = '<div class="bot-inbox inbox"><i class="fas fa-user"></i><div class="msg-header"><p>'+ result +'</p></div></div>';
-                        $(".form").append($replay);
-                        // when chat goes down the scroll bar automatically comes to the bottom
-                        $(".form").scrollTop($(".form")[0].scrollHeight);
-                    }
-                });
-            });
-        });
-    </script>
-  <script>
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-var bn = document.getElementById("bn");
-bn.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-</script>
   
-  <!-- Vendor JS Files -->
+
+  
+  <!-- speech -->
+   <script src="speech.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    
+     <!-- Vendor JS Files -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/feedform/validate.js"></script>
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
@@ -941,7 +1343,8 @@ window.onclick = function(event) {
 <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
     async defer>
 </script>
-
+<!--Google translater -->
+   
 </body>
 
 </html>

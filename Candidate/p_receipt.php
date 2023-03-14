@@ -1,40 +1,91 @@
 <?php
   include('session.php');
 include('../config.php');
-	 $msg = "";
-if (isset($_POST['submit'])){
-$id = $_SESSION['id'];
-$oldpass=md5($_POST['Old_password']);
-$Password= md5($_POST['New_password']);
-$Confirmpassword= md5($_POST['Confirm_New_password']);
-$login=mysqli_query($conn,"select * from tbl_login where id='$id'");
-$row=mysqli_fetch_array($login);
-if ($row["password"] == "$oldpass")
-     {
-		 if($Password==$Confirmpassword){
-			 if($Password==$row["password"] ){
-		      $msg = "<div class='alert alert-info'>Early used password are not allowed</div>";
-		     }
-		 else{
-          $update=mysqli_query($conn,"UPDATE `tbl_login` SET `password`='$Password' WHERE id='$id'");
-		  $msg = "<div class='alert alert-succes'>Password Updated Successfully</div>";
-		 }
-		 }
-		
-		 else{
-			 $msg = "<div class='alert alert-danger'>Passwords do not match.</div>";
-		     }
-		 }
-		 
-	  else
-	     {
-	      $msg = "<div class='alert alert-danger'>Old password is Incorrect.</div>";
-	     }
-   }
- 
+
+ if (isset($_POST['print'])){
+   require('../mpdf/vendor/autoload.php');
+   date_default_timezone_set('Asia/Kolkata');
+        $date=date('Y-m-d H:i:s');
+        $time=date("h:i:sa");
+        
+        $html='<style>
+                    .heading{
+                        font-size:15px; 
+                        text-align:center;
+                        margin-top:10px;
+                        font-weight:bold;
+                    }
+                    .sub-head{
+                        text-align:center;
+                        margin-top:12px;
+                    }
+                    .sub-head span{
+                        font-weight:bold;
+                    }
+                    .table{
+                        margin-top:32px;
+                        position: absolute;
+                        margin-left:20%;
+                        transform:translateX(-50%);
+						
+                    }
+                    th,td{
+                        padding:6px 10px;
+                        font-size:15px;
+                        text-align:left;
+						
+                    }
+					
+                </style>
+<img src="images/logo2.png" width=100 height=100></img>
+                  <h2 class="heading">Payment Receipt</h2>
+				<div id="mid">
+      <div class="info">
+	  <div class="sub-head" >Contact Info</div>
+      
+        <div class="sub-head">
+            Address : Election Commission of India, Delhi 252106 , </br>
+            Email   : electioncommissionofindia@gmail.com, </br>
+            Phone   : 555-555-5555</br>
+       </div>
+      </div>
+    </div>
+                <div class="sub-head">Date: <span>'.$date.'</span></div>
+                <div class="sub-head">Time: <span>'.$time.'</span></div>
+                <table border=0 class="table">
+                <tr>
+                    <th><h2>Amount Payable</h2></th>
+					<th><h2>Sub Total</h2></th>
+                </tr>
+				<tr>
+								<td><p>Registration Fees</p></td>
+								<td><p>Rs 45000.00/-</p></td>
+							</tr>
+
+							<tr>
+								<td><p>Processing fees</p></td>
+								<td><p>Rs 5000.00 /-</p></td>
+							</tr>
 
 
-?>
+
+							<tr >
+								
+								<td><h2>Total Amount Paid</h2></td>
+								<td><h2>Rs 50000 /-</h2></td>
+							</tr>
+        
+        </table>';
+
+        // echo $html;
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . '/tmp']);
+        $mpdf->WriteHTML($html);
+        $file=time().'.pdf';
+        $mpdf->output($file,'D');
+    
+
+}
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +93,7 @@ if ($row["password"] == "$oldpass")
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Voter Dashboard</title>
+  <title>Candidate Dashboard</title>
   <!-- base:css -->
   <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
    <link rel="stylesheet" href="css/style1.css" />
@@ -56,6 +107,8 @@ if ($row["password"] == "$oldpass")
   <link rel="stylesheet" href="css/style.css">
   <!-- endinject -->
   <link rel="icon" type="image/png" href="../favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="stylesheet" href="p_style.css"/>
+</head>
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
@@ -70,64 +123,7 @@ body>div{
     font-family: 'Roboto', sans-serif;
 }
 
-.table_responsive {
-    max-width: 900px;
-    border: 1px solid #00bcd4;
-    background-color: #efefef33;
-    padding:10px;
-    margin: auto;
-    border-radius:10px;
-}
 
-table {
-    width:10%;
-    font-size: 13px;
-    color: #444;
-    white-space: nowrap;
-    border-collapse: collapse;
-   
-}
-
-table>thead {
-    background: linear-gradient(180deg, #14149e 5%, #0000cd 100%);
-    color: #fff;
-}
-
-table>thead th {
-    padding: 15px;
-}
-
-table th,
-table td {
-    border: 1px solid #00000017;
-    padding: 10px 15px;
-}
-
-table>tbody>tr>td>img {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius:30%;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 6px #0003;
-}
-
-
-
-table>tbody>tr {
-    background-color: #fff;
-    transition: 0.3s ease-in-out;
-}
-
-
-table>tbody>tr:nth-child(even) {
-    background-color: rgb(238, 238, 238);
-}
-
-table>tbody>tr:hover{
-    filter: drop-shadow(0px 2px 6px #0002);
-}
 a{
 	text-decoration:none;
 	color:black;
@@ -156,7 +152,21 @@ a:hover{
        
     box-shadow: 0 2px 6px #0003;
 }
+.img3{
+    display: inline-block;
+    width:45%;
+    
+	margin-left:60px;
+    object-fit: cover;
+    border-radius:48%;
+    margin-bottom:6px;
+    box-shadow: 0 2px 6px #0003;
+}
 
+.icon{
+	 width:8%;
+    height:8%;
+}
 .text-muted{
 	margin-left:11px;
 }
@@ -165,31 +175,10 @@ a:hover{
     margin-bottom:10px;
  
 }
-.alert-succes{
-    color:#f8f9fa;
-    background-color: #0c932b;
-    border-color: #b8f2dc;
-}
-.alert-info{
-    color:#f8f9fa;
-    background-color:red;
-    border-color: #b8f2dc;
-}
-.alert-danger{
-    color: #f8f9fa;
-    background-color:red;
-    border-color: #b8f2dc;
-}
-.btn-primary {
-    color: #fff;
-    background-color: #223e9c;
-    border-color: #223e9c;
-}
-.btn-primary:hover{
-background-color:#102c8d;
-}
 </style>
 <body>
+
+ 
   <div class="container-scroller d-flex">
     <!-- partial:./partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -272,46 +261,68 @@ background-color:#102c8d;
         <div class="content-wrapper"> <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
             <span class="mdi mdi-menu"></span>
           </button>
-		  <div class="navbar-menu-wrapper navbar-search-wrapper d-none d-lg-flex align-items-center">
-          
-          
-        </div>
-         
-          <div class="row">
-		  
-		   <div class="col-md-6 grid-margin stretch-card" style="margin:auto;">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title" style="text-align:center; font-size:20px;">Change Password</h4><br>
-					<div> <?php echo $msg; ?></div>
-                    <form class="forms-sample" action="#" method="POST">
-                      <div class="form-group">
-                        <label for="exampleInputUsername1">Old Password</label>
-                        <input type="password" name="Old_password" class="form-control" id="exampleInputUsername1" placeholder="" />
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">New Password</label>
-                        <input type="password" name="New_password" class="form-control" id="exampleInputEmail1" placeholder="" />
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Confirm New Password</label>
-                        <input type="password" name="Confirm_New_password"  class="form-control" id="exampleInputPassword1" placeholder="" />
-                      </div>
-                      <button type="submit" name="submit" class="btn btn-primary mr-2"> Save </button>
-                      <button class="btn btn-light">Cancel</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-		
-     
-  
-          <!-- row end -->
-        </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:./partials/_footer.html -->
-        
-        <!-- partial -->
+		 <div id="invoice-POS">
+    <center id="top">
+      <div class="logo"></div>
+      <div class="info"> 
+        <h2>Payment Receipt</h2>
+      </div><!--End Info-->
+    </center><!--End InvoiceTop-->
+    
+    <div id="mid">
+      <div class="info">
+        <h2>Contact Info</h2>
+        <p> 
+            Address : Election Commission of India, Delhi 252106</br>
+            Email   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: electioncommissionofindia@gmail.com</br>
+            Phone   &nbsp;&nbsp;&nbsp;: 555-555-5555</br>
+        </p>
+      </div>
+    </div><!--End Invoice Mid-->
+    
+    <div id="bot">
+
+					<div id="table">
+						<table>
+							<tr class="tabletitle">
+								<th class="item"><h2>Amount Payable</h2></th>
+								<th class="Rate"><h2>Sub Total</h2></th>
+								<th><form action="#" method="post"><button type="submit" name="print" class="btn btn-info btn-icon-text">
+                          Print
+                          <i class="mdi mdi-printer btn-icon-append"></i>                                                                              
+                        </button>
+						</form></th>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Registration Fees</p></td>
+								<td class="tableitem"><p class="itemtext">Rs 45000.00/-</p></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">Processing fees</p></td>
+								<td class="tableitem"><p class="itemtext">Rs 5000.00 /-</p></td>
+							</tr>
+
+
+
+							<tr class="service">
+								<td></td>
+								<td class="Rate"><h2>Total Amount Paid</h2></td>
+								<td class="payment"><h2>Rs 50000 /-</h2></td>
+							</tr>
+
+
+						</table>
+					</div><!--End Table-->
+
+					<div id="legalcopy" >
+						<p class="legal" style="color:red;"><strong style="color:blue;">&nbsp;&nbsp;&nbsp;&nbsp;Thank you for Participating in the democratic process!</strong><br>Application of the candidate is valid only after the payment!!! 
+						</p>
+					</div>
+
+				</div><!--End InvoiceBot-->
+  </div><!--End Invoice-->
       </div>
       <!-- main-panel ends -->
    
@@ -339,6 +350,8 @@ background-color:#102c8d;
     <script src="../js/jquery.dataTables.min.js"></script>
     <script src="../js/dataTables.bootstrap5.min.js"></script>
     <script src="../js/script.js"></script>
+	<script src="js/jquery-3.2.1.min.js"></script>	
+<script src="js/bootstrap.js"></script>	
 </body>
 
 </html>

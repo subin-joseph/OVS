@@ -1,19 +1,6 @@
 <?php
   include('session.php');
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ovs";
- 
- // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
-	
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " 
-        . $conn->connect_error);
-}
-else {
+include('../config.php');
 $id=$_SESSION['id'];
 $login2=mysqli_query($conn,"select * from tbl_candidate where login_id='$id'");
 $rw=mysqli_fetch_array($login2);
@@ -30,7 +17,7 @@ else if ($rw['Status']==-1){
 else if ($rw['Status']==2){
 	$msg = "<div class='alert alert-success'>Nomination Approved </div>";
 }
- }
+
 
 
 ?>
@@ -41,7 +28,7 @@ else if ($rw['Status']==2){
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Voter Dashboard</title>
+  <title>Candidate Dashboard</title>
   <!-- base:css -->
   <link rel="stylesheet" href="css/dataTables.bootstrap5.min.css" />
    <link rel="stylesheet" href="css/style1.css" />
@@ -231,18 +218,32 @@ a:hover{
           <div class="collapse" id="ui-basic">
             <ul class="nav flex-column sub-menu">
 			
-              <li class="nav-item"> <a class="nav-link" href="ballot.php"> <i class="mdi mdi-grid-large menu-icon"></i>Ballot</a></li>
+     
               <li class="nav-item"> <a class="nav-link" href="result.php"> <i class="mdi mdi-chart-pie menu-icon"></i>Result</a></li>
             </ul>
           </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="status.php">
-            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+           <i class="mdi mdi-grid-large menu-icon"></i>
             <span class="menu-title">Status</span>
           </a>
         </li>
-        
+         <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#ui-basic2" aria-expanded="false" aria-controls="ui-basic">
+           <i class="mdi mdi-file-document-box-outline menu-icon"></i>
+            <span class="menu-title">Payment</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="ui-basic2">
+            <ul class="nav flex-column sub-menu">
+     
+   			<li class="nav-item"> <a class="nav-link" href="p_status.php"> <i class="mdi mdi-assistant"></i>&nbsp;&nbsp;Status</a></li>
+             <li class="nav-item"> <a class="nav-link" href="p_receipt.php"> <i class="mdi mdi-account-card-details"></i>&nbsp;&nbsp;Reciept</a></li>
+			</ul>
+          </div>
+        </li>
+		
         <li class="nav-item">
           <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
             <i class="mdi mdi-account menu-icon"></i>
@@ -252,7 +253,7 @@ a:hover{
           <div class="collapse" id="auth">
             <ul class="nav flex-column sub-menu">
      
-              <li class="nav-item"> <a class="nav-link" href="changepass.php"> <i class="mdi mdi-settings text-primary"></i>Change Password </a></li>
+              <li class="nav-item"> <a class="nav-link" href="changepass.php"> <i class="mdi mdi-settings text-primary"></i> Change Password</a></li>
               <li class="nav-item"> <a class="nav-link" href="logout.php"><i class="mdi mdi-logout text-primary"></i>Logout </a></li>
             </ul>
           </div>
